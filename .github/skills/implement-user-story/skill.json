@@ -1,0 +1,13 @@
+{
+  "skillId": "implement-user-story",
+  "version": "0.1.0-poc",
+  "description": "POC: read a user story from the workspace and implement the described code change.",
+  "inputs": {
+    "storyPath": { "type": "string", "required": true },
+    "userStoryId": { "type": "string", "required": false }
+  },
+  "outputs": {
+    "summary": { "type": "string" },
+    "filesChanged": { "type": "array", "items": { "type": "string" } }
+  }
+}

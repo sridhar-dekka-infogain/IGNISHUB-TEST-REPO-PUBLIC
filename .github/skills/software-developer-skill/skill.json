@@ -1,0 +1,14 @@
+{
+  "skillId": "software-developer-skill",
+  "version": "0.1.0-mvp",
+  "description": "MVP: implement a user story and open a GitHub PR.",
+  "inputs": {
+    "storyPath": { "type": "string", "required": false },
+    "JiraURL": { "type": "string", "required": false }
+  },
+  "outputs": {
+    "summary": { "type": "string" },
+    "filesChanged": { "type": "array", "items": { "type": "string" } },
+    "prUrl": { "type": "string" }
+  }
+}

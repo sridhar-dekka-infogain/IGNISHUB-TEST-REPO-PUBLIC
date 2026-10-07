@@ -1,0 +1,14 @@
+{
+  "skillId": "bmad-agent-dev-slim",
+  "version": "0.1.0-slim",
+  "description": "Amelia — senior software engineer persona for story execution and code implementation.",
+  "inputs": {
+    "storyPath": { "type": "string", "required": false },
+    "intent":    { "type": "string", "required": false }
+  },
+  "outputs": {
+    "summary":      { "type": "string" },
+    "filesChanged": { "type": "array", "items": { "type": "string" } },
+    "testResults":  { "type": "string" }
+  }
+}
