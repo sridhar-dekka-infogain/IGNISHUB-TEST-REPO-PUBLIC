@@ -1,0 +1,67 @@
+// Prisma schema documenting the persistence model for Story 3.1 —
+// Caregiver Availability Calendar Management.
+//
+// NOTE: This repo does not yet have a wired-up Prisma client / database
+// connection (no other schema files existed before this story). The
+// models below define the `booking` schema tables this story introduces
+// so the shape is documented and ready for a Prisma-backed repository
+// adapter (see `apps/api/src/modules/booking/availability/adapters/` for
+// the in-memory adapters currently used, implementing the same ports).
+//
+// `auth.caregiver_profiles` is owned by Epic 2's auth module; it is
+// declared here only as a minimal stub so the foreign key relations
+// below are structurally valid. Replace with the real shared model once
+// the auth module's schema is introduced into this file.
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["multiSchema"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  schemas  = ["auth", "booking"]
+}
+
+/// Owned by Epic 2 (auth module). Stub declaration for FK integrity only.
+model CaregiverProfile {
+  id                    String                          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  availabilitySchedules CaregiverAvailabilitySchedule[]
+  availabilityBlocks    CaregiverAvailabilityBlock[]
+
+  @@map("caregiver_profiles")
+  @@schema("auth")
+}
+
+/// Recurring weekly availability schedule — one row per day-of-week slot.
+model CaregiverAvailabilitySchedule {
+  id          String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  caregiverId String           @map("caregiver_id") @db.Uuid
+  caregiver   CaregiverProfile @relation(fields: [caregiverId], references: [id])
+  dayOfWeek   Int              @map("day_of_week") @db.SmallInt
+  startTime   DateTime         @map("start_time") @db.Time()
+  endTime     DateTime         @map("end_time") @db.Time()
+  createdAt   DateTime         @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt   DateTime         @default(now()) @map("updated_at") @db.Timestamptz()
+
+  @@unique([caregiverId, dayOfWeek, startTime], map: "no_overlap")
+  @@index([caregiverId], map: "idx_availability_schedule_caregiver")
+  @@map("caregiver_availability_schedule")
+  @@schema("booking")
+}
+
+/// Date-range blocks (holidays, personal time) the caregiver is unavailable.
+model CaregiverAvailabilityBlock {
+  id          String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  caregiverId String           @map("caregiver_id") @db.Uuid
+  caregiver   CaregiverProfile @relation(fields: [caregiverId], references: [id])
+  startDate   DateTime         @map("start_date") @db.Date
+  endDate     DateTime         @map("end_date") @db.Date
+  reason      String?
+  createdAt   DateTime         @default(now()) @map("created_at") @db.Timestamptz()
+
+  @@index([caregiverId, startDate, endDate], map: "idx_availability_blocks_caregiver_dates")
+  @@map("caregiver_availability_blocks")
+  @@schema("booking")
+}

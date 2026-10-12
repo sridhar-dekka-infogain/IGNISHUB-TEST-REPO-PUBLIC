@@ -1,0 +1,13 @@
+{
+  "name": "care-giver-app",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "test:api": "npm run test --workspace=apps/api",
+    "test:mobile": "npm run test --workspace=apps/mobile"
+  }
+}

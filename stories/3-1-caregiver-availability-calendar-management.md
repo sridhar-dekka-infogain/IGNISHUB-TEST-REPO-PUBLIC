@@ -3,7 +3,7 @@ story_id: "3.1"
 story_key: "3-1-caregiver-availability-calendar-management"
 epic: 3
 title: Caregiver Availability Calendar Management
-status: ready-for-dev
+status: in-progress
 priority: critical
 effort: L
 depends_on: ["2.3", "2.8"]
@@ -12,6 +12,7 @@ frs: ["FR10"]
 nfrs: ["NFR3", "NFR4", "NFR12"]
 project: care-giver-app
 date: 2026-09-03
+baseline_commit: "655251a44c78a00e76526046ef8fc9095c26bed3"
 ---
 
 # Story 3.1 — Caregiver Availability Calendar Management
